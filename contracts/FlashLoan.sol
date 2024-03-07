@@ -79,14 +79,14 @@ contract FlashLoan {
         uint repayAmount = amount + fee;
         uint loanAmount = amount0 > 0 ? amount0 : amount1;
 
-        uint trade1Coin = placeTrade(BUSD, CROX, loanAmount);
-        uint trade2Coin = placeTrade(CROX, CAKE, trade1Coin);
-        uint trade3Coin = placeTrade(CAKE, BUSD, trade2Coin);
+        uint trade1Token = placeTrade(BUSD, CROX, loanAmount);
+        uint trade2Token = placeTrade(CROX, CAKE, trade1Token);
+        uint trade3Token = placeTrade(CAKE, BUSD, trade2Token);
 
-        bool profit = checkProfit(repayAmount, trade3Coin);
+        bool profit = checkProfit(repayAmount, trade3Token);
         require(profit, "PancakeCall: Arbitrage is not profitable");
 
-        IERC20(BUSD).transfer(userAddress, trade3Coin - repayAmount);
+        IERC20(BUSD).transfer(userAddress, trade3Token - repayAmount);
         IERC20(busdAddress).transfer(pair, repayAmount);
     }
 
@@ -121,8 +121,8 @@ contract FlashLoan {
 
     function checkProfit(
         uint repayAmount,
-        uint earnedCoin
+        uint earnedToken
     ) private pure returns (bool) {
-        return earnedCoin > repayAmount;
+        return earnedToken > repayAmount;
     }
 }
