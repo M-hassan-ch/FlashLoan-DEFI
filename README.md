@@ -8,14 +8,13 @@ This Solidity contract facilitates flash loan-based triangular arbitrage on the 
 
 ### `initateArbitrage`
 
-- **Description:** Initiates the arbitrage by swapping borrowed BUSD for WBNB in the liquidity pool.
+- **Description:** Initiates the arbitrage.
 - **Parameters:**
   - `busdBorrow`: Address of the borrowed BUSD token.
   - `amount`: Amount of BUSD to borrow for the arbitrage.
 - **Actions:**
   - Approves BUSD, CROX, and CAKE token spending on the PancakeSwap Router.
-  - Identifies the liquidity pool between BUSD and WBNB.
-  - Swaps BUSD for WBNB in the liquidity pool, initiating the arbitrage process.
+  - initiating the arbitrage process.
 
 ### `pancakeCall`
 
