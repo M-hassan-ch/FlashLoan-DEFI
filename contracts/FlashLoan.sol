@@ -8,6 +8,7 @@ import "./interfaces/IUniswapV2Router02.sol";
 import "./interfaces/IERC20.sol";
 import "./libraries/UniswapV2Library.sol";
 import "./libraries/SafeERC20.sol";
+import "hardhat/console.sol";
 
 contract FlashLoan {
     using SafeERC20 for IERC20;
@@ -83,6 +84,10 @@ contract FlashLoan {
         uint trade2Token = placeTrade(CROX, CAKE, trade1Token);
         uint trade3Token = placeTrade(CAKE, BUSD, trade2Token);
 
+        console.log("Trading BUSD => CROX :", loanAmount/(10**18), "=>", trade1Token/(10**18));
+        console.log("Trading CROX => CAKE :", trade1Token/(10**18), "=>", trade2Token/(10**18));
+        console.log("Trading CAKE => BUSD :", trade2Token/(10**18), "=>", trade3Token/(10**18));
+
         bool profit = checkProfit(repayAmount, trade3Token);
         require(profit, "PancakeCall: Arbitrage is not profitable");
 
@@ -99,7 +104,7 @@ contract FlashLoan {
             fromToken,
             toToken
         );
-        require(pair == address(0), "PlaceTrade: Pair not fount");
+        require(pair != address(0), "PlaceTrade: Pair not fount");
         address[] memory path = new address[](2);
         (path[0], path[1]) = (fromToken, toToken);
 
@@ -124,5 +129,9 @@ contract FlashLoan {
         uint earnedToken
     ) private pure returns (bool) {
         return earnedToken > repayAmount;
+    }
+
+    function getBalanceOfToken(address tokenAddress) public view returns(uint){
+        return IERC20(tokenAddress).balanceOf(address(this));
     }
 }
